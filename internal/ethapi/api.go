@@ -2268,6 +2268,8 @@ type CallBundleArgs struct {
 	Coinbase               *string               `json:"coinbase"`
 	Timestamp              *uint64               `json:"timestamp"`
 	Timeout                *int64                `json:"timeout"`
+	GasLimit               *uint64               `json:"gasLimit"`
+	Difficulty             *big.Int              `json:"difficulty"`
 }
 
 // CallBundle will simulate a bundle of transactions at the top of a given block
@@ -2314,12 +2316,20 @@ func (s *BundleAPI) CallBundle(ctx context.Context, args CallBundleArgs) (map[st
 	if args.Coinbase != nil {
 		coinbase = common.HexToAddress(*args.Coinbase)
 	}
+	difficulty := parent.Difficulty
+	if args.Difficulty != nil {
+		difficulty = args.Difficulty
+	}
+	gasLimit := parent.GasLimit
+	if args.GasLimit != nil {
+		gasLimit = *args.GasLimit
+	}
 	header := &types.Header{
 		ParentHash: parent.Hash(),
 		Number:     blockNumber,
-		GasLimit:   parent.GasLimit,
+		GasLimit:   gasLimit,
 		Time:       timestamp,
-		Difficulty: parent.Difficulty,
+		Difficulty: difficulty,
 		Coinbase:   coinbase,
 	}
 
