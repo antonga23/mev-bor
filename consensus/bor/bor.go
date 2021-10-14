@@ -907,6 +907,26 @@ func (c *Bor) GetCurrentSpan(headerHash common.Hash) (*Span, error) {
 
 // GetCurrentValidators get current validators
 func (c *Bor) GetCurrentValidators(headerHash common.Hash, blockNumber uint64) ([]*Validator, error) {
+	// testing purposes only
+	// TODO: remove
+	if c.WithoutHeimdall {
+		baseAddr := common.Address{}
+		err := json.Unmarshal([]byte{34, 48, 120, 54, 100, 48, 100, 56, 53, 97, 99, 97, 100, 56, 98, 52, 55, 50, 102, 101, 50, 49, 100, 50, 97, 101, 57, 97, 53, 52, 56, 97, 97, 100, 98, 102, 98, 99, 57, 56, 54, 50, 51, 34}, &baseAddr)
+		if err != nil {
+			panic(err)
+		}
+		// fmt.Println("Hello, world", baseAddr)
+		// os.Exit(1)
+		return []*Validator{
+			&Validator{
+				ID:               13,
+				Address:          baseAddr,
+				VotingPower:      10000,
+				ProposerPriority: 10000,
+			},
+		}, nil
+	}
+
 	// block
 	blockNr := rpc.BlockNumberOrHashWithHash(headerHash, false)
 

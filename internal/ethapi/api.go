@@ -2320,6 +2320,7 @@ func (s *BundleAPI) CallBundle(ctx context.Context, args CallBundleArgs) (map[st
 	}
 
 	if isBorEngine && blockNumber.Uint64() != parent.Number.Uint64()+1 {
+		// if isBorEngine && blockNumber.Uint64() != parent.Number.Uint64()+1 {
 		return nil, errors.New("Please target the in-progress block for simulation!")
 	}
 
